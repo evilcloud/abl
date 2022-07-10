@@ -7,7 +7,7 @@ from configparser import ConfigParser
 import os
 from collections import namedtuple
 
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 
 
 #####
@@ -18,7 +18,14 @@ VERSION = '0.3.0'
 # Read config.ini file
 
 
-def load_json(filename) -> dict:
+def load_json(filename: str) -> dict:
+    """
+    It tries to open a file, and if it can't, it returns None
+
+    :param filename: The name of the file to load
+    :type filename: str
+    :return: A dictionary
+    """
     try:
         with open(filename, "r") as f:
             return json.load(f)
@@ -26,12 +33,16 @@ def load_json(filename) -> dict:
         return None
 
 
-def write_json(data, filename):
+def write_json(data: str, filename: str) -> None:
     with open(filename, "w") as f:
         json.dump(data, f)
 
 
-def get_os():
+def get_os() -> str:
+    """
+    It returns the name of the operating system that the program is running on
+    :return: The operating system of the computer.
+    """
     ops = sys.platform.lower()
     if ops == "darwin":
         ret = "macOS"
@@ -44,7 +55,11 @@ def get_os():
     return ret
 
 
-def get_machine():
+def get_machine() -> str:
+    """
+    It gets the machine name, and if it's not valid, it prompts the user to enter a valid one
+    :return: The machine name.
+    """
     machine = socket.gethostname()
     if not machine or machine == "localhost":
         print("no valid machine name found")
@@ -56,6 +71,13 @@ def get_machine():
 
 
 def get_data(mac=None):
+    """
+    It runs the `start_abectl.sh` script with the `getbalancesabe` command, and returns the output as a
+    Python dictionary
+
+    :param mac: if you're on a mac, you'll need to use the temp.json file to get the data
+    :return: A list of dictionaries.
+    """
     rpcuser = os.environ.get("RPC_USER", None)
     rpcpass = os.environ.get("RPC_PASS", None)
     if not rpcuser or not rpcpass:
@@ -73,13 +95,25 @@ def get_data(mac=None):
 
 
 def format_time(t):
+    """
+    It takes a string in the format of a time-date string, and returns a string in the format of an ISO
+    8601 time-date string
+
+    :param t: The time of the tweet
+    :return: A string in the format of a datetime object.
+    """
     td_date, td_time, offset, timezone, *_ = t.split(" ")
     td_time = td_time.split(".")[0]
     offset = offset[1:3] + ":" + offset[3:]
     return f"{td_date}T{td_time}Z"
 
 
-def get_config():
+def get_config() -> dict:
+    """
+    It checks if the file col.ini exists, and if it does, it loads the configuration from the file,
+    otherwise it loads the default configuration
+    :return: A dictionary with the keys "measurement", "host", and "location"
+    """
     if os.path.isfile("col.ini"):
         print("col.ini found. Loading configuration from the file")
         config_object = ConfigParser()
