@@ -2,7 +2,7 @@
     "version": "0.3.000",
     "update": true,
     "changes": "first workable version",
-    "emergency": false,
+    "emergency": true,
     "old001": {
         "version": "0",
         "update": false,
