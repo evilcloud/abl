@@ -1,9 +1,9 @@
 {
-    "version": "0.3.1",
+    "version": "1.0.0",
     "update": true,
     "changes": "first workable version",
     "emergency": false,
-    "old001": {
+    "xx001": {
         "version": "0",
         "update": false,
         "changes": "none",

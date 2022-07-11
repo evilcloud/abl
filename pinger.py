@@ -3,8 +3,8 @@ import time
 import git
 import shutil
 import os
-import inside
 import sys
+import col
 
 VERSION = '0.0.1'
 
@@ -37,21 +37,35 @@ def update_files(update_destination: str, update_storage: str) -> None:
         print(f"\t done.")
 
 
-repo_url = "https://github.com/evilcloud/abl"
-update_destination = os.getcwd()
-update_storage = os.path.join(update_destination, "update")
+def launch(cluster):
+    repo_url = "https://github.com/evilcloud/abl"
+    update_destination = os.getcwd()
+    update_storage = os.path.join(update_destination, "update")
 
-while True:
-    inside_data = inside.start()
-    if inside_data == ("EMERGENCY"):
-        print("Emergency stop signal received. Shutting down...")
-        sys.exit(0)
-    if inside_data == ("UPDATE"):
-        print("Updating process(outside) initiated")
-        print("Fetching update")
-        clone_repo(repo_url, update_storage)
-        print("Updating...")
-        update_files(update_destination, update_storage)
-        print("Done.")
-        print("Restarting main process")
-    time.sleep(1)
+    while True:
+        col_data = col.run(cluster)
+        if col_data == ("EMERGENCY"):
+            print("Emergency stop signal received. Shutting down...")
+            sys.exit(0)
+        if col_data == ("UPDATE"):
+            print("Updating process(outside) initiated")
+            print("Fetching update")
+            clone_repo(repo_url, update_storage)
+            print("Updating...")
+            update_files(update_destination, update_storage)
+            print("Done.")
+            print("Restarting main process")
+        time.sleep(1)
+
+
+if __name__ == "__main__":
+    arg1 = sys.argv[1] if len(sys.argv) > 1 else None
+    cluster = True
+    if arg1:
+        if arg1 == "-p" or arg1 == "--primary":
+            cluster = False
+        else:
+            print("Unknown argument:", arg1)
+            sys.exit(1)
+
+    launch(cluster)

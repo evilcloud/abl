@@ -5,14 +5,7 @@ import socket
 import subprocess
 from configparser import ConfigParser
 import os
-from collections import namedtuple
-
-VERSION = '0.3.1'
-
-
-#####
-# TESTING
-######
+from urllib.request import urlopen
 
 
 # Read config.ini file
@@ -36,6 +29,31 @@ def load_json(filename: str) -> dict:
 def write_json(data: str, filename: str) -> None:
     with open(filename, "w") as f:
         json.dump(data, f)
+
+
+def get_version() -> str:
+    """
+    It loads the version.json file and returns the version number
+    :return: The version of the program.
+    """
+    data = load_json("version.json")
+    version = data.get("version", None)
+    return version
+
+
+def get_github_version():
+    """
+    It opens a URL, reads the JSON data, and returns the version and update information.
+    :return: A tuple of the version and update
+    """
+    url = 'https://raw.githubusercontent.com/evilcloud/abl/main/version.json'
+    response = urlopen(url)
+    data_json = json.loads(response.read())
+    response.close()
+    version = data_json.get("version", None)
+    update = data_json.get("update", False)
+    emergency = data_json.get("emergency", False)
+    return (version, update, emergency)
 
 
 def get_os() -> str:
@@ -137,7 +155,7 @@ class Indata:
         self.location = ini_data["location"]
         self.os = get_os()
         self.machine = get_machine()
-        self.col_version = VERSION
+        self.col_version = get_version()
         self.total_balance = 0
         self.current_height = 0
 
@@ -158,7 +176,7 @@ class Inping:
         # config_object.read("col.ini")
         self.measurement = "blockchain"
         self.machine = get_machine()
-        self.col_version = VERSION
+        self.col_version = get_version()
         self.current_height = 0
 
     def update_data(self, data):
@@ -168,7 +186,11 @@ class Inping:
             pass
 
 
-def main(cluster):
+def run(cluster):
+    version = get_version()
+    print_cluster = " CLUSTER" if cluster else " PRIMARY"
+    print(f"Pinger v. {version} {print_cluster}")
+
     filename = "tel.json"
 
     old_data = Indata()
@@ -207,7 +229,4 @@ if __name__ == "__main__":
             print("Unknown argument:", arg1)
             sys.exit(1)
 
-    print_cluster = " CLUSTER" if cluster else " PRIMARY"
-    print(f"Pinger v. {VERSION} {print_cluster}")
-
-    main(cluster)
+    run(cluster)
