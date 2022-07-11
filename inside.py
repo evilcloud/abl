@@ -8,7 +8,7 @@ def get_github_version():
     It opens a URL, reads the JSON data, and returns the version and update information.
     :return: A tuple of the version and update
     """
-    url = 'https://raw.githubusercontent.com/evilcloud/abl/autoupdate/version.json'
+    url = 'https://raw.githubusercontent.com/evilcloud/abl/main/version.json'
     response = urlopen(url)
     data_json = json.loads(response.read())
     print(data_json)
