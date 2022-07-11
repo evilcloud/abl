@@ -1,5 +1,12 @@
 {
     "version": "0.3.1",
     "update": true,
-    "changes": "first workable version"
+    "changes": "first workable version",
+    "emergency": true,
+    "old001": {
+        "version": "0",
+        "update": false,
+        "changes": "none",
+        "emergency": false
+    }
 }
