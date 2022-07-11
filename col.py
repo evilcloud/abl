@@ -203,7 +203,7 @@ def run(cluster, main_launch=False):
     ping_data = Inping()
 
     while True:
-        if main_launch:
+        if not main_launch:
             new_version, update, emergency = get_github_version()
             if emergency:
                 return "EMERGENCY"
