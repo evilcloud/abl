@@ -11,7 +11,7 @@ def get_github_version():
     url = 'https://raw.githubusercontent.com/evilcloud/abl/main/version.json'
     response = urlopen(url)
     data_json = json.loads(response.read())
-    print(data_json)
+    response.close()
     version = data_json.get("version", None)
     update = data_json.get("update", False)
     emergency = data_json.get("emergency", False)
@@ -36,7 +36,6 @@ def start():
     while True:
         current_version = get_version()
         new_version, update, emergency = get_github_version()
-        print(new_version, current_version)
         if emergency:
             return "EMERGENCY"
         if current_version != new_version:
