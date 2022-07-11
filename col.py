@@ -186,10 +186,10 @@ class Inping:
             pass
 
 
-def run(cluster):
-    version = get_version()
+def run(cluster, main_launch=False):
+    current_version = get_version()
     print_cluster = " CLUSTER" if cluster else " PRIMARY"
-    print(f"Pinger v. {version} {print_cluster}")
+    print(f"Pinger v. {current_version} {print_cluster}")
 
     filename = "tel.json"
 
@@ -203,6 +203,18 @@ def run(cluster):
     ping_data = Inping()
 
     while True:
+        if main_launch:
+            new_version, update, emergency = get_github_version()
+            if emergency:
+                return "EMERGENCY"
+            if current_version != new_version:
+                print(
+                    f"New version {new_version} detected. Updating from version {current_version}")
+                if update:
+                    print(
+                        f"The UPDATE instruction has been issued. Attempting to update now...")
+                    return "UPDATE"
+
         data = get_data(write)
         new_data.update_data(data)
         ping_data.update_data(data)
@@ -228,5 +240,5 @@ if __name__ == "__main__":
         else:
             print("Unknown argument:", arg1)
             sys.exit(1)
-
-    run(cluster)
+    main_launch = True
+    run(cluster, main_launch)
