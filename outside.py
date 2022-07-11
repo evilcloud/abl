@@ -30,6 +30,8 @@ def update_files(update_destination: str, update_storage: str) -> None:
     for file in files:
         if file.startswith("."):
             continue
+        if file == "version.json":
+            input("version")
         print(f"... moving {file}", end="")
         shutil.move(os.path.join(update_storage, file),
                     os.path.join(update_destination, file))
