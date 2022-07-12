@@ -220,15 +220,13 @@ def run(cluster, main_launch=False):
         ping_data.update_data(data)
         time.sleep(0.1)
         write_json(ping_data.__dict__, filename)
+        cluster_str = "C" if cluster else "P"
         if old_data.total_balance != new_data.total_balance:
-            print("New total balance:",
-                  new_data.total_balance, new_data.current_time, end="")
+            print(cluster_str, "New total balance:",
+                  new_data.total_balance, new_data.current_time,)
             old_data.update_data(data)
-            if cluster:
-                print("\tCluster version. No data is being written")
-            else:
+            if not cluster:
                 write_json(new_data.__dict__, filename)
-                print()
         time.sleep(9.9)
 
 
