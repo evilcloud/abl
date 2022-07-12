@@ -1,8 +1,14 @@
 {
-    "version": "1.0.2b",
+    "version": "1.0.3",
     "update": true,
-    "changes": "first workable version",
+    "changes": "Cluster notification placed on the same line as the balance. Little but annoying condition previously.",
     "emergency": false,
+    "xx002": {
+        "version": "1.0.2b",
+        "update": true,
+        "changes": "first workable version",
+        "emergency": false,
+    },
     "xx001": {
         "version": "0",
         "update": false,
