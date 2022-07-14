@@ -198,7 +198,7 @@ def run(cluster, main_launch=False):
     redis_host = os.environ.get("REDIS_HOST", None)
     redis_port = os.environ.get("REDIS_PORT", None)
     if redis_pass and redis_host and redis_port and cluster:
-        print("Redis password found. Connecting to Redis")
+        print("Redis found. Connecting to Redis")
         redisdb = redis.Redis(host=redis_host,
                               port=redis_port, password=redis_pass)
     old_data = Indata()
@@ -237,8 +237,10 @@ def run(cluster, main_launch=False):
             else:
                 write_json(new_data.__dict__, filename)
                 if redisdb:
-                    redisdb.set(old_data.machine, new_data.total_balance)
-
+                    try:
+                        redisdb.set(old_data.machine, new_data.total_balance)
+                    except Exception:
+                        pass
         time.sleep(9.9)
 
 

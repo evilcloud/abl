@@ -43,11 +43,6 @@ def launch(cluster):
     update_destination = os.getcwd()
     update_storage = os.path.join(update_destination, "update")
 
-    ###
-    # Redis install. Remove in the next versions!!!
-    os.popen("pip install redis")
-    os.popen("pip3 install redis")
-
     while True:
         col_data = col.run(cluster)
         if col_data == ("EMERGENCY"):
