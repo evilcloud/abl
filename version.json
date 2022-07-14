@@ -1,6 +1,6 @@
 {
-    "version": "1.0.2b",
-    "update": true,
+    "version": "1.0.3",
+    "update": false,
     "changes": "first workable version",
     "emergency": false,
     "xx001": {

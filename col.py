@@ -6,7 +6,7 @@ import subprocess
 from configparser import ConfigParser
 import os
 from urllib.request import urlopen
-
+import redis
 
 # Read config.ini file
 
@@ -193,6 +193,14 @@ def run(cluster, main_launch=False):
 
     filename = "tel.json"
 
+    redisdb = None
+    redis_pass = os.environ.get("REDIS", None)
+    redis_host = os.environ.get("REDIS_HOST", None)
+    redis_port = os.environ.get("REDIS_PORT", None)
+    if redis_pass and redis_host and redis_port and cluster:
+        print("Redis password found. Connecting to Redis")
+        redisdb = redis.Redis(host=redis_host,
+                              port=redis_port, password=redis_pass)
     old_data = Indata()
     print("Machine:", old_data.machine)
     new_data = Indata()
@@ -228,6 +236,9 @@ def run(cluster, main_launch=False):
                 print("Cluster version. No data is being written")
             else:
                 write_json(new_data.__dict__, filename)
+                if redisdb:
+                    redisdb.set(old_data.machine, new_data.total_balance)
+
         time.sleep(9.9)
 
 
