@@ -1,6 +1,15 @@
 from urllib.request import urlopen
+import subprocess
 import time
-import git
+try:
+    import git
+except ImportError:
+    try:
+        subprocess.call(['pip3', 'install', 'GitPython'])
+        gitpy = True
+    except subprocess.CalledProcessError:
+        print("GitPython module failed to load")
+        gitpy = False
 import shutil
 import os
 import sys
@@ -48,7 +57,7 @@ def launch(cluster):
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)
-        if col_data == ("UPDATE"):
+        if col_data == ("UPDATE") and gitpy:
             print("Updating process(outside) initiated")
             print("Fetching update")
             clone_repo(repo_url, update_storage)

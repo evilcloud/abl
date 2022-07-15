@@ -228,15 +228,17 @@ def run(cluster, main_launch=False):
 
     # block ping
     ping_data = Inping()
+    not_mentioned_yet = True
 
     while True:
         if not main_launch:
             new_version, update, emergency = get_github_version()
             if emergency:
                 return "EMERGENCY"
-            if current_version != new_version:
+            if current_version != new_version and not_mentioned_yet:
                 print(
                     f"New version {new_version} detected. Updating from version {current_version}")
+                not_mentioned_yet = False
                 if update:
                     print(
                         f"The UPDATE instruction has been issued. Attempting to update now...")
