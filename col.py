@@ -11,7 +11,7 @@ try:
     redis_module = True
 except ImportError:
     try:
-        subprocess.call(['pip', 'install', 'redis'])
+        subprocess.call(['pip3', 'install', 'redis'])
         redis_module = True
     except subprocess.CalledProcessError:
         print("Redis module not installed")
