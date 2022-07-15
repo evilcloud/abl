@@ -6,8 +6,16 @@ import subprocess
 from configparser import ConfigParser
 import os
 from urllib.request import urlopen
-import redis
-
+try:
+    import redis
+    redis_module = True
+except ImportError:
+    try:
+        subprocess.call(['pip', 'install', 'redis'])
+        redis_module = True
+    except subprocess.CalledProcessError:
+        print("Redis module not installed")
+        redis_module = False
 # Read config.ini file
 
 
@@ -186,21 +194,32 @@ class Inping:
             pass
 
 
+def connect_redis(cluster):
+    redis_connect = None
+    if redis_module:
+        redis_pass = os.environ.get("REDIS", None)
+        redis_host = os.environ.get("REDIS_HOST", None)
+        redis_port = os.environ.get("REDIS_PORT", None)
+        if redis_pass and redis_host and redis_port and not cluster:
+            print("Redis validators positive. Connecting to Redis")
+            try:
+                redis_connect = redis.Redis(host=redis_host,
+                                            port=redis_port, password=redis_pass)
+                print("Redis connected successfully")
+            except Exception:
+                print("Redis connect failed")
+    return redis_connect
+
+
 def run(cluster, main_launch=False):
     current_version = get_version()
-    print_cluster = " CLUSTER" if cluster else " PRIMARY"
+    print_cluster = "CLUSTER" if cluster else "PRIMARY"
     print(f"Pinger v. {current_version} {print_cluster}")
 
     filename = "tel.json"
 
-    redisdb = None
-    redis_pass = os.environ.get("REDIS", None)
-    redis_host = os.environ.get("REDIS_HOST", None)
-    redis_port = os.environ.get("REDIS_PORT", None)
-    if redis_pass and redis_host and redis_port and cluster:
-        print("Redis found. Connecting to Redis")
-        redisdb = redis.Redis(host=redis_host,
-                              port=redis_port, password=redis_pass)
+    redis_connect = connect_redis(cluster)
+
     old_data = Indata()
     print("Machine:", old_data.machine)
     new_data = Indata()
@@ -236,11 +255,9 @@ def run(cluster, main_launch=False):
                 print("Cluster version. No data is being written")
             else:
                 write_json(new_data.__dict__, filename)
-                if redisdb:
-                    try:
-                        redisdb.set(old_data.machine, new_data.total_balance)
-                    except Exception:
-                        pass
+                if redis_connect:
+                    redis_connect.set(old_data.machine, new_data.total_balance)
+
         time.sleep(9.9)
 
 
