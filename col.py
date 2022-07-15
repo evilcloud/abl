@@ -202,12 +202,16 @@ def connect_redis(cluster):
         redis_port = os.environ.get("REDIS_PORT", None)
         if redis_pass and redis_host and redis_port and not cluster:
             print("Redis validators positive. Connecting to Redis")
-            try:
-                redis_connect = redis.Redis(host=redis_host,
-                                            port=redis_port, password=redis_pass)
-                print("Redis connected successfully")
-            except Exception:
-                print("Redis connect failed")
+            for attempt in range(3):
+                print(f"Connecting to Redis. Attempt {attempt +1}")
+                try:
+                    redis_connect = redis.Redis(host=redis_host,
+                                                port=redis_port, password=redis_pass)
+                    print("Redis connected successfully")
+                    break
+                except Exception:
+                    time.sleep(2)
+                    print("Redis connect failed")
     return redis_connect
 
 
