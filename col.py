@@ -1,5 +1,6 @@
 import json
 import time
+import datetime
 import sys
 import socket
 import subprocess
@@ -12,11 +13,23 @@ try:
 except ImportError:
     try:
         subprocess.call(['pip3', 'install', 'redis'])
+        import redis
         redis_module = True
     except subprocess.CalledProcessError:
         print("Redis module not installed")
         redis_module = False
-# Read config.ini file
+try:
+    subprocess.call(['pip3', 'install', 'pymongo[srv]'])
+    from pymongo import MongoClient
+    mongo_module = True
+except ImportError:
+    try:
+        subprocess.call(['pip3', 'install', 'pymongo[srv]'])
+        from pymongo import MongoClient
+        mongo_module = True
+    except subprocess.CalledProcessError:
+        print("Mongo module not installed")
+        mongo_module = False
 
 
 def load_json(filename: str) -> dict:
@@ -195,7 +208,7 @@ class Inping:
 
 
 def connect_redis(cluster):
-    redis_connect = None
+    redis_client = None
     if redis_module:
         redis_pass = os.environ.get("REDIS", None)
         redis_host = os.environ.get("REDIS_HOST", None)
@@ -205,14 +218,38 @@ def connect_redis(cluster):
             for attempt in range(3):
                 print(f"Connecting to Redis. Attempt {attempt +1}")
                 try:
-                    redis_connect = redis.Redis(host=redis_host,
-                                                port=redis_port, password=redis_pass)
+                    redis_client = redis.Redis(host=redis_host,
+                                               port=redis_port, password=redis_pass)
                     print("Redis connected successfully")
                     break
                 except Exception:
                     time.sleep(2)
                     print("Redis connect failed")
-    return redis_connect
+    return redis_client
+
+
+def connect_mongo():
+    mongo_client = None
+    if mongo_module or not mongo_client:
+        mongo_line = os.environ.get("MONGO", None)
+        if mongo_line:
+            print("Mongo validators positive. Connecting to MongoDB")
+            for attempt in range(3):
+                print(f"Connecting to MongoDB. Attempt {attempt +1}")
+                try:
+                    mongo_client = MongoClient(mongo_line)
+                    print("MongoDB connected successfully")
+                    break
+                except Exception:
+                    time.sleep(2)
+                    print("MongoDB connect failed")
+    return mongo_client
+
+
+def mongo_initial_data(cluster, old_data, mongo_client):
+    mongodb = mongo_client.Abel
+    mongodb.mining.update_one({"_id": old_data.machine}, {
+        "$set": {"os": old_data.os, "cluster": cluster, "programmatic": True}, }, upsert=True)
 
 
 def run(cluster, main_launch=False):
@@ -222,13 +259,17 @@ def run(cluster, main_launch=False):
 
     filename = "tel.json"
 
-    redis_connect = connect_redis(cluster)
+    redis_client = connect_redis(cluster)
 
     old_data = Indata()
     print("Machine:", old_data.machine)
     new_data = Indata()
     empty_data = {}
     write = True if old_data.os == "macOS" else None
+
+    mongo_client = connect_mongo()
+    if mongo_client:
+        mongo_initial_data(cluster, old_data, mongo_client)
 
     # block ping
     ping_data = Inping()
@@ -257,13 +298,16 @@ def run(cluster, main_launch=False):
             print("New total balance:",
                   new_data.total_balance, new_data.current_time,)
             old_data.update_data(data)
+            if mongo_client:
+                mongodb = mongo_client.Abel
+                mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
+                    "total_balance": new_data.total_balance, "update_time": datetime.datetime.utcnow()}, "$push": {"timeseries": {"time": datetime.datetime.utcnow(), "total": new_data.total_balance}}}, upsert=True)
             if cluster:
                 print("Cluster version. No data is being written")
             else:
                 write_json(new_data.__dict__, filename)
-                if redis_connect:
-                    redis_connect.set(old_data.machine, new_data.total_balance)
-
+                if redis_client:
+                    redis_client.set(old_data.machine, new_data.total_balance)
         time.sleep(9.9)
 
 

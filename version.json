@@ -1,7 +1,7 @@
 {
-    "version": "1.0.34",
+    "version": "1.0.4",
     "update": true,
-    "changes": "first workable version",
+    "changes": "mongo and redis integration",
     "emergency": false,
     "xx001": {
         "version": "0",
