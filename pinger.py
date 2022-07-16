@@ -1,19 +1,21 @@
+import col
+import sys
+import os
+import shutil
 from urllib.request import urlopen
 import subprocess
 import time
+gitpy = False
 try:
     import git
 except ImportError:
     try:
         subprocess.call(['pip3', 'install', 'GitPython'])
+        import git
         gitpy = True
     except subprocess.CalledProcessError:
         print("GitPython module failed to load")
         gitpy = False
-import shutil
-import os
-import sys
-import col
 
 
 VERSION = '0.0.1'

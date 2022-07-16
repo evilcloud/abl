@@ -99,13 +99,16 @@ def get_machine() -> str:
     It gets the machine name, and if it's not valid, it prompts the user to enter a valid one
     :return: The machine name.
     """
-    machine = socket.gethostname()
-    if not machine or machine == "localhost":
-        print("no valid machine name found")
-        machine = input("Enter a valid machine name: ")
-        if not machine:
+    with open('machine') as f:
+        machine = f.read()
+    if not machine:
+        machine = socket.gethostname()
+        if not machine or machine == "localhost":
             print("no valid machine name found")
-            sys.exit(1)
+            machine = input("Enter a valid machine name: ")
+            if not machine:
+                print("no valid machine name found")
+                sys.exit(1)
     return machine
 
 
