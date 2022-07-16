@@ -1,5 +1,5 @@
 {
-    "version": "1.0.5b",
+    "version": "1.0.5c",
     "update": true,
     "changes": "mongo and redis integration",
     "emergency": false,

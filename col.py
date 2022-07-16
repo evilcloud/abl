@@ -99,6 +99,7 @@ def get_machine() -> str:
     It gets the machine name, and if it's not valid, it prompts the user to enter a valid one
     :return: The machine name.
     """
+    machine = None
     if os.path.isfile("machine"):
         with open('machine') as f:
             machine = f.read()
