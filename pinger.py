@@ -44,12 +44,22 @@ def update_files(update_destination: str, update_storage: str) -> None:
                     os.path.join(update_destination, file))
         time.sleep(0.5)
         print(f"\t done.")
+        return
 
 
-def launch(cluster):
+def update():
     repo_url = "https://github.com/evilcloud/abl"
     update_destination = os.getcwd()
     update_storage = os.path.join(update_destination, "update")
+    print("Fetching update")
+    clone_repo(repo_url, update_storage)
+    print("Updating...")
+    update_files(update_destination, update_storage)
+    print("Done.")
+    return
+
+
+def launch(cluster):
 
     while True:
         col_data = col.run(cluster)
@@ -58,13 +68,14 @@ def launch(cluster):
             sys.exit(0)
         if col_data == ("UPDATE") and 'git' in sys.modules:
             print("Updating process(outside) initiated")
-            print("Fetching update")
-            clone_repo(repo_url, update_storage)
-            print("Updating...")
-            update_files(update_destination, update_storage)
-            print("Done.")
+            update()
             print("Restarting main process")
         time.sleep(1)
+        if col_data == ("STRUCTURAL") and 'git' in sys.modules:
+            print("Structural issue detected. Attempting in 10 minutes.")
+            time.sleep(600)
+            update()
+            print("Restarting main process")
 
 
 if __name__ == "__main__":

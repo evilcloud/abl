@@ -7,29 +7,8 @@ import subprocess
 from configparser import ConfigParser
 import os
 from urllib.request import urlopen
-try:
-    import redis
-    redis_module = True
-except ImportError:
-    try:
-        subprocess.call(['pip3', 'install', 'redis'])
-        import redis
-        redis_module = True
-    except subprocess.CalledProcessError:
-        print("Redis module not installed")
-        redis_module = False
-try:
-    subprocess.call(['pip3', 'install', 'pymongo[srv]'])
-    from pymongo import MongoClient
-    mongo_module = True
-except ImportError:
-    try:
-        subprocess.call(['pip3', 'install', 'pymongo[srv]'])
-        from pymongo import MongoClient
-        mongo_module = True
-    except subprocess.CalledProcessError:
-        print("Mongo module not installed")
-        mongo_module = False
+import redis_func
+import mongo_func
 
 
 def load_json(filename: str) -> dict:
@@ -111,7 +90,7 @@ def get_machine() -> str:
             if not machine:
                 print("no valid machine name found")
                 sys.exit(1)
-    return machine
+    return machine.strip()
 
 
 def get_data(mac=None):
@@ -212,44 +191,7 @@ class Inping:
             pass
 
 
-def connect_redis(cluster):
-    redis_client = None
-    if redis_module:
-        redis_pass = os.environ.get("REDIS", None)
-        redis_host = os.environ.get("REDIS_HOST", None)
-        redis_port = os.environ.get("REDIS_PORT", None)
-        if redis_pass and redis_host and redis_port and not cluster:
-            print("Redis validators positive. Connecting to Redis")
-            for attempt in range(3):
-                print(f"Connecting to Redis. Attempt {attempt +1}")
-                try:
-                    redis_client = redis.Redis(host=redis_host,
-                                               port=redis_port, password=redis_pass)
-                    print("Redis connected successfully")
-                    break
-                except Exception:
-                    time.sleep(2)
-                    print("Redis connect failed")
-    return redis_client
-
-
-def connect_mongo():
-    mongo_client = None
-    if mongo_module or not mongo_client:
-        mongo_line = os.environ.get("MONGO", None)
-        if mongo_line:
-            print("Mongo validators positive. Connecting to MongoDB")
-            for attempt in range(3):
-                print(f"Connecting to MongoDB. Attempt {attempt +1}")
-                try:
-                    mongo_client = MongoClient(mongo_line)
-                    print("MongoDB connected successfully")
-                    break
-                except Exception:
-                    time.sleep(2)
-                    print("MongoDB connect failed")
-    return mongo_client
-
+#
 
 def mongo_initial_data(cluster, old_data, mongo_client):
     mongodb = mongo_client.Abel
@@ -264,7 +206,10 @@ def run(cluster, main_launch=False):
 
     filename = "tel.json"
 
-    redis_client = connect_redis(cluster)
+    if not cluster:
+        redis_client = redis_func.connect(cluster)
+        if not redis_client:
+            return "STRUCTURAL"
 
     old_data = Indata()
     print("Machine:", old_data.machine)
@@ -272,14 +217,14 @@ def run(cluster, main_launch=False):
     empty_data = {}
     write = True if old_data.os == "macOS" else None
 
-    mongo_client = connect_mongo()
+    mongo_client = mongo_func.connect()
     if mongo_client:
         mongo_initial_data(cluster, old_data, mongo_client)
 
     # block ping
     ping_data = Inping()
     not_mentioned_yet = True
-
+    mongo_counter = 0
     while True:
         if not main_launch:
             new_version, update, emergency = get_github_version()

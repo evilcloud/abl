@@ -1,7 +1,7 @@
 {
-    "version": "1.0.5c",
+    "version": "1.0.5d",
     "update": true,
-    "changes": "mongo and redis integration",
+    "changes": "clean machine name to avoid \n discrepancies",
     "emergency": false,
     "xx001": {
         "version": "0",
