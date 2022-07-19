@@ -251,10 +251,10 @@ def connect_mongo():
     return mongo_client
 
 
-def mongo_initial_data(cluster, old_data, mongo_client):
+def mongo_initial_data(cluster, data, version, mongo_client):
     mongodb = mongo_client.Abel
-    mongodb.mining.update_one({"_id": old_data.machine}, {
-        "$set": {"os": old_data.os, "cluster": cluster, "programmatic": True}, }, upsert=True)
+    mongodb.mining.update_one({"_id": data.machine}, {
+        "$set": {"os": data.os, "cluster": cluster, "programmatic": True, "block_height": data.current_height, "version": version}, }, upsert=True)
 
 
 def run(cluster, main_launch=False):
@@ -274,7 +274,8 @@ def run(cluster, main_launch=False):
 
     mongo_client = connect_mongo()
     if mongo_client:
-        mongo_initial_data(cluster, old_data, mongo_client)
+        mongo_initial_data(cluster, new_data,
+                           current_version, mongo_client)
 
     # block ping
     ping_data = Inping()
@@ -302,13 +303,13 @@ def run(cluster, main_launch=False):
         write_json(ping_data.__dict__, filename)
         if old_data.total_balance != new_data.total_balance:
             print("New total balance:",
-                  new_data.total_balance, new_data.current_time,)
+                  new_data.total_balance, new_data.current_time, new_data.current_height, current_version)
             old_data.update_data(data)
             if mongo_client:
                 timenow = datetime.datetime.utcnow()
                 try:
                     mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
-                        "total_balance": new_data.total_balance, "update_time": timenow}, "block_height": new_data.current_height, "$push": {"timeseries": {"time": timenow, "block_height": new_data.current_height, "total": new_data.total_balance}}}, upsert=True)
+                        "total_balance": new_data.total_balance, "update_time": timenow, "block_height": new_data.current_height, "version": current_version}, "$push": {"timeseries": {"time": timenow, "block_height": new_data.current_height, "total": new_data.total_balance}}}, upsert=True)
                 except Exception as ex:
                     print("Error writing to MongoDB:\n\t", ex)
             if cluster:
