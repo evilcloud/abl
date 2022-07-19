@@ -309,7 +309,7 @@ def run(cluster, main_launch=False):
                 timenow = datetime.datetime.utcnow()
                 try:
                     mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
-                        "total_balance": new_data.total_balance, "update_time": timenow}, "$push": {"timeseries": {"time": timenow, "total": new_data.total_balance}}}, upsert=True)
+                        "total_balance": new_data.total_balance, "update_time": timenow, "os": new_data.os, "cluster": cluster, "programmatic": True, "version": current_version}, "$push": {"timeseries": {"time": timenow, "total": new_data.total_balance}}}, upsert=True)
                 except Exception as ex:
                     print("Error writing to MongoDB:\n\t", ex)
             if cluster:
