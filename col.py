@@ -251,8 +251,7 @@ def connect_mongo():
     return mongo_client
 
 
-def mongo_initial_data(cluster, data, version, mongo_client):
-    mongodb = mongo_client.Abel
+def mongo_initial_data(cluster, data, version, mongodb):
     mongodb.mining.update_one({"_id": data.machine}, {"$set": {
                               "os": data.os, "cluster": cluster, "programmatic": True, "version": version}, }, upsert=True)
 
@@ -274,13 +273,17 @@ def run(cluster, main_launch=False):
 
     mongo_client = connect_mongo()
     if mongo_client:
-        mongo_initial_data(cluster, new_data,
-                           current_version, mongo_client)
-
+        mongodb = mongo_client.Abel
+        # mongo_initial_data(cluster, new_data,
+        #                    current_version, mongodb)
+        try:
+            mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
+                "os": old_data.os, "cluster": cluster, "programmatic": True, "version": current_version}, }, upsert=True)
+        except Exception as ex:
+            print("Error updating database:\n\t", ex)
     # block ping
     ping_data = Inping()
     not_mentioned_yet = True
-    mongodb = mongo_client.Abel
 
     while True:
         if not main_launch:
@@ -309,7 +312,7 @@ def run(cluster, main_launch=False):
                 timenow = datetime.datetime.utcnow()
                 try:
                     mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
-                        "total_balance": new_data.total_balance, "update_time": timenow, "os": new_data.os, "cluster": cluster, "programmatic": True, "version": current_version}, "$push": {"timeseries": {"time": timenow, "total": new_data.total_balance}}}, upsert=True)
+                        "total_balance": new_data.total_balance, "update_time": timenow}, "$push": {"timeseries": {"time": timenow, "total": new_data.total_balance}}}, upsert=True)
                 except Exception as ex:
                     print("Error writing to MongoDB:\n\t", ex)
             if cluster:
