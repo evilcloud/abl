@@ -111,7 +111,7 @@ def get_machine() -> str:
             if not machine:
                 print("no valid machine name found")
                 sys.exit(1)
-    return machine
+    return machine.strip()
 
 
 def get_data(mac=None):
