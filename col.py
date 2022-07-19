@@ -279,6 +279,7 @@ def run(cluster, main_launch=False):
     # block ping
     ping_data = Inping()
     not_mentioned_yet = True
+    mongodb = mongo_client.Abel
 
     while True:
         if not main_launch:
@@ -304,9 +305,12 @@ def run(cluster, main_launch=False):
                   new_data.total_balance, new_data.current_time,)
             old_data.update_data(data)
             if mongo_client:
-                mongodb = mongo_client.Abel
-                mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
-                    "total_balance": new_data.total_balance, "update_time": datetime.datetime.utcnow()}, "$push": {"timeseries": {"time": datetime.datetime.utcnow(), "total": new_data.total_balance}}}, upsert=True)
+                timenow = datetime.datetime.utcnow()
+                try:
+                    mongodb.mining.update_one({"_id": old_data.machine}, {"$set": {
+                        "total_balance": new_data.total_balance, "update_time": timenow}, "block_height": new_data.current_height, "$push": {"timeseries": {"time": timenow, "block_height": new_data.current_height, "total": new_data.total_balance}}}, upsert=True)
+                except Exception as ex:
+                    print("Error writing to MongoDB:\n\t", ex)
             if cluster:
                 print("Cluster version. No data is being written")
             else:
