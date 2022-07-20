@@ -40,10 +40,14 @@ def load_json(filename: str) -> dict:
     :type filename: str
     :return: A dictionary
     """
-    try:
-        with open(filename, "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
+    if os.path.isfile(filename):
+        try:
+            with open(filename, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print("error loading json file")
+    else:
+        print("JSON file not found")
         return None
 
 
