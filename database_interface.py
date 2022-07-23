@@ -13,6 +13,7 @@ class Secrets:
     DETA_KEY = r.get("DETA")
     DETA_name_mining = r.get("DETA_name_mining")
     DETA_name_ping = r.get("DETA_name_ping")
+    DETA_name_all = r.get("DETA_name_all")
     RPC_USER = r.get("RPC_USER")
     RPC_PASS = r.get("RPC_PASS")
     version_url = r.get("version_url")
