@@ -1,15 +1,18 @@
-import updater
-import datetime
-import humanize
-import systemworks
-import database_interface
-import processor
 import time
+import processor
+import database_interface
+import systemworks
+import humanize
+import datetime
+import updater
 import subprocess
-
-subprocess.call(['pip', 'install', 'humanize'])
-subprocess.call(['pip', 'install', 'deta'])
-subprocess.call(['pip', 'install', 'redis'])
+import sys
+if "humanize" not in sys.modules:
+    subprocess.call(['pip', 'install', 'humanize'])
+    import humanize
+if "deta" not in sys.modules:
+    subprocess.call(['pip', 'install', 'deta'])
+    import deta
 
 
 def run(wallet):
