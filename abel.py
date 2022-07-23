@@ -2,19 +2,11 @@ import time
 import processor
 import database_interface
 import systemworks
-# import humanize
+import humanize
 import datetime
 import updater
 import subprocess
 import sys
-if "humanize" not in sys.modules:
-    subprocess.call(['pip3', 'install', 'humanize'])
-    subprocess.call(['pip', 'install', 'humanize'])
-    import humanize
-if "deta" not in sys.modules:
-    subprocess.call(['pip3', 'install', 'deta'])
-    subprocess.call(['pip', 'install', 'deta'])
-    import deta
 
 
 def run(wallet):
@@ -27,8 +19,10 @@ def run(wallet):
     PRC_PASS = database_interface.Secrets.RPC_PASS
     DETA_name_mining = database_interface.Secrets.DETA_name_mining
     DETA_name_ping = database_interface.Secrets.DETA_name_ping
+    DETA_name_all = database_interface.Secrets.DETA_name_all
     mining = database_interface.Database(
         machine_name, DETA_name_mining, wallet)
+    all = database_interface.Database(machine_name, DETA_name_all, wallet)
     ping = database_interface.Database(machine_name, DETA_name_ping)
     current_version = systemworks.get_version()
     wallet_version = "WALLET" if wallet else ""
@@ -49,6 +43,7 @@ def run(wallet):
         if int(current_balance) != int(process_data.old.total_balance):
             process_data.update(current_data)
             mining.update(process_data)
+            all.update(process_data)
             print(
                 f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. Ver. {current_version} {wallet_version}"
             )

@@ -14,10 +14,6 @@ except ImportError:
     except subprocess.CalledProcessError:
         print("GitPython module failed to load")
 
-subprocess.call(['pip3', 'install', 'humanize'])
-subprocess.call(['pip3', 'install', 'deta'])
-subprocess.call(['pip3', 'install', 'redis'])
-
 
 VERSION = '0.0.2'
 

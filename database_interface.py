@@ -38,6 +38,22 @@ class Database:
             }
         )
 
+    def add(self, data):
+        self.detadb.update(
+            {
+                "machine": data.machine,
+                "os": data.os,
+                "balance": data.total_balance,
+                "block": data.current_height,
+                "programmatic": data.programmatic,
+                "updatetime": data.update_time_str,
+                "update amount": data.update_amount,
+                "update period": data.update_period_str,
+                "update block difference": data.update_block_diff,
+                "version": data.version,
+            }
+        )
+
     def ping(self, data):
         self.detadb.update(
             {
