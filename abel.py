@@ -8,9 +8,11 @@ import updater
 import subprocess
 import sys
 if "humanize" not in sys.modules:
+    subprocess.call(['pip3', 'install', 'humanize'])
     subprocess.call(['pip', 'install', 'humanize'])
     import humanize
 if "deta" not in sys.modules:
+    subprocess.call(['pip3', 'install', 'deta'])
     subprocess.call(['pip', 'install', 'deta'])
     import deta
 
