@@ -1,7 +1,7 @@
 {
-    "version": "1.1.1e",
-    "update": true,
-    "changes": "removed block height",
+    "version": "2.0.0",
+    "update": false,
+    "changes": "completley rewritten. changed databases. all is new except the pinger",
     "emergency": false,
     "xx001": {
         "version": "0",

@@ -14,8 +14,11 @@ except ImportError:
     except subprocess.CalledProcessError:
         print("GitPython module failed to load")
 
+subprocess.call(['pip3', 'install', 'humanize'])
+subprocess.call(['pip3', 'install', 'deta'])
 
-VERSION = '0.0.2'
+
+VERSION = '0.0.3'
 
 
 def clone_repo(repo_url: str, update_storage: str):
