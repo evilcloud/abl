@@ -1,6 +1,6 @@
 {
     "version": "2.0.0",
-    "update": false,
+    "update": true,
     "changes": "completley rewritten. changed databases. all is new except the pinger",
     "emergency": false,
     "xx001": {
