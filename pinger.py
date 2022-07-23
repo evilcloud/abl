@@ -1,4 +1,4 @@
-import col
+import abel
 import sys
 import os
 import shutil
@@ -55,7 +55,7 @@ def launch(cluster):
     update_storage = os.path.join(update_destination, "update")
 
     while True:
-        col_data = col.run(cluster)
+        col_data = abel.run(cluster)
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)
