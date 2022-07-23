@@ -2,9 +2,9 @@ import abel
 import subprocess
 
 
-subprocess.call(['pip3', 'install', 'humanize'])
-subprocess.call(['pip3', 'install', 'deta'])
-subprocess.call(['pip3', 'install', 'redis'])
+subprocess.call(['pip', 'install', 'humanize'])
+subprocess.call(['pip', 'install', 'deta'])
+subprocess.call(['pip', 'install', 'redis'])
 
 
 def run(cluster):
