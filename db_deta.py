@@ -21,7 +21,8 @@ class Detadb:
         db_entries = self.db.fetch()
         db_entries_count = db_entries.count
         if db_entries_count:
-            print(f"Database already exists with {db_entries_count} entries...")
+            print(
+                f"Database already exists with {db_entries_count} entries...")
         else:
             print(f"Database {DETA_DB_NAME} does not exist. Creating...")
 
@@ -30,3 +31,6 @@ class Detadb:
 
     def ping(self, data):
         self.db.put(data)
+
+    def fetch(self, key):
+        self.existing_entries = self.db.fetch(key)
