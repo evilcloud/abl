@@ -1,4 +1,4 @@
-import abel
+import col
 import sys
 import os
 import shutil
@@ -16,9 +16,10 @@ except ImportError:
 
 subprocess.call(['pip3', 'install', 'humanize'])
 subprocess.call(['pip3', 'install', 'deta'])
+subprocess.call(['pip3', 'install', 'redis'])
 
 
-VERSION = '0.0.3'
+VERSION = '0.0.2'
 
 
 def clone_repo(repo_url: str, update_storage: str):
@@ -55,7 +56,7 @@ def launch(cluster):
     update_storage = os.path.join(update_destination, "update")
 
     while True:
-        col_data = abel.run(cluster)
+        col_data = col.run(cluster)
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)
