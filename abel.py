@@ -1,10 +1,15 @@
-import time
-import processor
-import database_interface
-import systemworks
-import humanize
-import datetime
 import updater
+import datetime
+import humanize
+import systemworks
+import database_interface
+import processor
+import time
+import subprocess
+
+subprocess.call(['pip', 'install', 'humanize'])
+subprocess.call(['pip', 'install', 'deta'])
+subprocess.call(['pip', 'install', 'redis'])
 
 
 def run(wallet):
@@ -17,7 +22,8 @@ def run(wallet):
     PRC_PASS = database_interface.Secrets.RPC_PASS
     DETA_name_mining = database_interface.Secrets.DETA_name_mining
     DETA_name_ping = database_interface.Secrets.DETA_name_ping
-    mining = database_interface.Database(machine_name, DETA_name_mining, wallet)
+    mining = database_interface.Database(
+        machine_name, DETA_name_mining, wallet)
     ping = database_interface.Database(machine_name, DETA_name_ping)
     current_version = systemworks.get_version()
     wallet_version = "WALLET" if wallet else ""
