@@ -41,7 +41,7 @@ def run(wallet):
         current_data = processor.get_data(PRC_USER, PRC_PASS)
 
         current_balance = current_data.get("total_balance", 0)
-        if int(current_balance) != int(process_data.old.total_balance) and wallet:
+        if int(current_balance) != int(process_data.old.total_balance):
             process_data.update(current_data)
             print(
                 f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. Ver. {current_version} {wallet_version}"
