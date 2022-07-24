@@ -3,7 +3,8 @@ import sys
 
 
 def run(cluster):
-    ret = abel.run(not cluster)
+    wallet = True if cluster == '-p' else False
+    ret = abel.run(wallet)
     if ret == "EMERGENCY":
         sys.exit(1)
     else:

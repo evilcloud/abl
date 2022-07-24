@@ -1,3 +1,4 @@
+from ast import arg
 import col
 import sys
 import os
@@ -47,8 +48,7 @@ def update_files(update_destination: str, update_storage: str) -> None:
 
 
 def launch_procedure(cluster):
-    wallet = "" if cluster else "-p"
-    ret = subprocess.call(['python3', 'abel.py', wallet])
+    ret = subprocess.call(['python3', 'abel.py', cluster])
     if ret == 1:
         return "EMERGENCY"
     else:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     cluster = True
     if arg1:
         if arg1 == "-p" or arg1 == "--primary":
-            cluster = False
+            cluster = arg1
         else:
             print("Unknown argument:", arg1)
             sys.exit(1)
