@@ -22,7 +22,7 @@ def run(wallet):
     DETA_name_all = database_interface.Secrets.DETA_name_all
     mining = database_interface.Database(
         machine_name, DETA_name_mining, wallet)
-    all = database_interface.Database(machine_name, DETA_name_all, wallet)
+    datalake = database_interface.Database(machine_name, DETA_name_all, wallet)
     ping = database_interface.Database(machine_name, DETA_name_ping)
     current_version = systemworks.get_version()
     wallet_version = "WALLET" if wallet else ""
@@ -43,7 +43,7 @@ def run(wallet):
         if int(current_balance) != int(process_data.old.total_balance):
             process_data.update(current_data)
             mining.update(process_data)
-            all.update(process_data)
+            datalake.add(process_data)
             print(
                 f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. Ver. {current_version} {wallet_version}"
             )
