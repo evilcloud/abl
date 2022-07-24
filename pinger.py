@@ -57,7 +57,7 @@ def launch_procedure(wallet):
         return "UPDATE"
 
 
-def launch(cluster):
+def launch(wallet):
     repo_url = "https://github.com/evilcloud/abl"
     update_destination = os.getcwd()
     update_storage = os.path.join(update_destination, "update")
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     wallet = False
     if arg1:
         if arg1 == "-p" or arg1 == "--primary":
-            wallet = True
+            print("launching WALLET")
         else:
             print("Unknown argument:", arg1)
             sys.exit(1)
