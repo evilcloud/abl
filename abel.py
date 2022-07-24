@@ -26,6 +26,7 @@ def run(wallet):
     ping = database_interface.Database(machine_name, DETA_name_ping)
     current_version = systemworks.get_version()
     wallet_version = "WALLET" if wallet else ""
+    print(f"Launching v. {current_version} {wallet_version}")
 
     while True:
         # current_data = processor.get_data_2()

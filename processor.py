@@ -53,7 +53,8 @@ class _Adata:
 
     def update_data(self, data):
         self.total_balance = int(data.get("total_balance", self.total_balance))
-        self.current_height = int(data.get("current_height", self.current_height))
+        self.current_height = int(
+            data.get("current_height", self.current_height))
         self.update_time = datetime.datetime.utcnow()
         self.update_time_str = self.update_time.strftime("%Y-%m-%dT%H:%M:%S")
 

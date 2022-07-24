@@ -65,3 +65,6 @@ class Database:
                 "since last award": data.ping_delta_time_str,
             }
         )
+
+    def fetch(self, key):
+        self.value = self.detadb.get(key)
