@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 
-def run(wallet):
+def run(wallet=False):
     process_data = processor.Datadiff(wallet)
     machine_name = process_data.machine
 
@@ -56,4 +56,4 @@ def run(wallet):
 
 
 if __name__ == "__main__":
-    run(True)
+    run()
