@@ -82,3 +82,7 @@ def get_version() -> str:
     else:
         version = "unknown"
     return version
+
+
+def is_wallet():
+    return True if os.path.isfile("wallet") else False

@@ -10,6 +10,7 @@ import sys
 
 
 def run(wallet=False):
+    wallet = systemworks.is_wallet()
     process_data = processor.Datadiff(wallet)
     machine_name = process_data.machine
 
