@@ -1,8 +1,8 @@
 {
-    "version": "2.0.5",
-    "update": true,
+    "version": "2.0.6",
+    "update": false,
     "changes": "completley rewritten. changed databases. all is new except the pinger",
-    "emergency": true,
+    "emergency": false,
     "xx001": {
         "version": "0",
         "update": false,

@@ -47,8 +47,10 @@ def update_files(update_destination: str, update_storage: str) -> None:
         print(f"\t done.")
 
 
-def launch_procedure(cluster):
-    ret = subprocess.call(['python3', 'abel.py', cluster])
+def launch_procedure(wallet):
+    wallet = "wallet" if wallet else "no-wallet"
+    print(f"Launching procedure with {wallet}")
+    ret = subprocess.call(['python3', 'abel.py', wallet])
     if ret == 1:
         return "EMERGENCY"
     else:
@@ -61,7 +63,7 @@ def launch(cluster):
     update_storage = os.path.join(update_destination, "update")
 
     while True:
-        col_data = launch_procedure(cluster)
+        col_data = launch_procedure(wallet)
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)
@@ -78,12 +80,12 @@ def launch(cluster):
 
 if __name__ == "__main__":
     arg1 = sys.argv[1] if len(sys.argv) > 1 else None
-    cluster = True
+    wallet = False
     if arg1:
         if arg1 == "-p" or arg1 == "--primary":
-            cluster = arg1
+            wallet = True
         else:
             print("Unknown argument:", arg1)
             sys.exit(1)
 
-    launch(cluster)
+    launch(wallet)
