@@ -19,4 +19,6 @@ def run(wallet):
 
 if __name__ == '__main__':
     arg1 = sys.argv[1] if len(sys.argv) > 1 else None
+    print(arg1)
+    input(arg1)
     run(arg1)
