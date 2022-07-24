@@ -48,8 +48,6 @@ def update_files(update_destination: str, update_storage: str) -> None:
 
 
 def launch_procedure(wallet):
-    wallet = "wallet" if wallet else "no-wallet"
-    print(f"Launching procedure with {wallet}")
     ret = subprocess.call(['python3', 'abel.py', wallet])
     if ret == 1:
         return "EMERGENCY"
@@ -58,11 +56,15 @@ def launch_procedure(wallet):
 
 
 def launch(wallet):
+    subprocess.call(['pip3', 'install', 'deta'])
+    subprocess.call(['pip3', 'install', 'humanize'])
+
     repo_url = "https://github.com/evilcloud/abl"
     update_destination = os.getcwd()
     update_storage = os.path.join(update_destination, "update")
 
     while True:
+        print(wallet)
         col_data = launch_procedure(wallet)
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
