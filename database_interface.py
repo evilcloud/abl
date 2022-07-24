@@ -63,6 +63,7 @@ class Database:
                 "blocks since last": data.ping_delta_block,
                 "time": data.ping_time_str,
                 "since last award": data.ping_delta_time_str,
+                "version": data.version,
             }
         )
 

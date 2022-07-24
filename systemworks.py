@@ -2,6 +2,7 @@ import os
 import sys
 import socket
 import json
+import time
 
 
 def load_json(filename: str) -> dict:
@@ -13,6 +14,7 @@ def load_json(filename: str) -> dict:
     :return: A dictionary
     """
     if os.path.isfile(filename):
+        time.sleep(0.5)
         try:
             with open(filename, "r") as f:
                 return json.load(f)
