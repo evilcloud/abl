@@ -3,7 +3,7 @@ import sys
 
 
 def run(cluster):
-    ret = abel.run(cluster)
+    ret = abel.run(not cluster)
     if ret == "EMERGENCY":
         sys.exit(1)
     else:
