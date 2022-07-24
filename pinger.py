@@ -15,7 +15,7 @@ except ImportError:
         print("GitPython module failed to load")
 
 
-VERSION = '0.0.2'
+VERSION = '1.0.0'
 
 
 def clone_repo(repo_url: str, update_storage: str):
@@ -46,13 +46,22 @@ def update_files(update_destination: str, update_storage: str) -> None:
         print(f"\t done.")
 
 
+def launch_procedure(cluster):
+    wallet = "" if cluster else "-p"
+    ret = subprocess.call(['python3', 'abel.py', wallet])
+    if ret == 1:
+        return "EMERGENCY"
+    else:
+        return "UPDATE"
+
+
 def launch(cluster):
     repo_url = "https://github.com/evilcloud/abl"
     update_destination = os.getcwd()
     update_storage = os.path.join(update_destination, "update")
 
     while True:
-        col_data = col.run(cluster)
+        col_data = launch_procedure(cluster)
         if col_data == ("EMERGENCY"):
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)

@@ -2,7 +2,7 @@
     "version": "2.0.5",
     "update": true,
     "changes": "completley rewritten. changed databases. all is new except the pinger",
-    "emergency": false,
+    "emergency": true,
     "xx001": {
         "version": "0",
         "update": false,
