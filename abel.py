@@ -42,11 +42,12 @@ def run(wallet):
         current_balance = current_data.get("total_balance", 0)
         if int(current_balance) != int(process_data.old.total_balance) and wallet:
             process_data.update(current_data)
-            mining.update(process_data)
-            datalake.add(process_data)
             print(
                 f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. Ver. {current_version} {wallet_version}"
             )
+            if wallet:
+                mining.update(process_data)
+                datalake.add(process_data)
         else:
             process_data.ping(current_data.get("current_height", 0))
             ping.ping(process_data)
