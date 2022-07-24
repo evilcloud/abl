@@ -40,7 +40,7 @@ def run(wallet):
         current_data = processor.get_data(PRC_USER, PRC_PASS)
 
         current_balance = current_data.get("total_balance", 0)
-        if int(current_balance) != int(process_data.old.total_balance):
+        if int(current_balance) != int(process_data.old.total_balance) and wallet:
             process_data.update(current_data)
             mining.update(process_data)
             datalake.add(process_data)
