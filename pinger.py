@@ -82,7 +82,7 @@ def launch(wallet):
 
 if __name__ == "__main__":
     arg1 = sys.argv[1] if len(sys.argv) > 1 else None
-    wallet = False
+    wallet = ""
     if arg1:
         if arg1 == "-p" or arg1 == "--primary":
             print("launching WALLET")
