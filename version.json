@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
     "version": "3.0.0",
-=======
-    "version": "2.0.8",
->>>>>>> b60d43e7c6aef606b0a6c9c713fa0564348b7626
     "update": false,
     "changes": "completley rewritten. changed databases. all is new except the pinger",
     "emergency": false,
