@@ -28,14 +28,14 @@ def run(wallet=False):
     print(f"Launching v. {current_version} {wallet_version}")
 
     while True:
-        # current_data = processor.get_data_2()
-        version_url = database_interface.Secrets.version_url
-        remote_version = updater.get_github_version(version_url)
-        if remote_version["version"] != current_version:
-            if remote_version["emergency"]:
-                return "EMERGENCY"
-            if remote_version["update"]:
-                return "UPDATE"
+        # temporary off
+        # version_url = database_interface.Secrets.version_url
+        # remote_version = updater.get_github_version(version_url)
+        # if remote_version["version"] != current_version:
+        #     if remote_version["emergency"]:
+        #         return "EMERGENCY"
+        #     if remote_version["update"]:
+        #         return "UPDATE"
 
         current_data = processor.get_data(PRC_USER, PRC_PASS)
 
