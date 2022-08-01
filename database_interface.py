@@ -1,25 +1,25 @@
 from dataclasses import dataclass
 from platform import machine
 import db_deta
-import db_redis
+# import db_redis
 import os
 
 
 print("redis request")
-r = db_redis.Redisdb()
-DETA_KEY = os.environ.get('DETA', r.get("DETA"))
+# r = db_redis.Redisdb()
+DETA_KEY = os.environ.get('DETA')
 
 
 @dataclass
 class Secrets:
     DETA_KEY = r.get("DETA")
     DETA_name_mining = os.environ.get(
-        "DETA_NAME_MINING", r.get("DETA_name_mining"))
-    DETA_name_ping = os.environ.get("DETA_NAME_PING", r.get("DETA_name_ping"))
-    DETA_name_all = os.environ.get("DETA_NAME_ALL", r.get("DETA_name_all"))
-    RPC_USER = os.environ.get("RPC_USER", r.get("RPC_USER"))
-    RPC_PASS = os.environ.get("RPC_PASS", r.get("RPC_PASS"))
-    version_url = os.environ.get("VERSION_URL", r.get("version_url"))
+        "DETA_NAME_MINING")
+    DETA_name_ping = os.environ.get("DETA_NAME_PING")
+    DETA_name_all = os.environ.get("DETA_NAME_ALL")
+    RPC_USER = os.environ.get("RPC_USER")
+    RPC_PASS = os.environ.get("RPC_PASS")
+    version_url = os.environ.get("VERSION_URL")
 
 
 class Database:
