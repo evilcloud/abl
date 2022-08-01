@@ -5,8 +5,6 @@ import systemworks
 import humanize
 import datetime
 import updater
-import subprocess
-import sys
 
 
 def run(wallet=False):

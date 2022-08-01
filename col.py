@@ -10,7 +10,7 @@ def run(wallet):
     wallet = True if wallet == '-p' or wallet == '--primary' else False
 
     print(f"Col lanuching {'WALLET' if wallet else 'CLUSTER'}")
-    ret = abel.run(wallet)
+    ret = abel.start(wallet)
     if ret == "EMERGENCY":
         sys.exit(1)
     else:
