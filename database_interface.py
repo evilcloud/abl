@@ -12,7 +12,7 @@ DETA_KEY = os.environ.get('DETA')
 
 @dataclass
 class Secrets:
-    DETA_KEY = r.get("DETA")
+    DETA_KEY = os.environ.get("DETA")
     DETA_name_mining = os.environ.get(
         "DETA_NAME_MINING")
     DETA_name_ping = os.environ.get("DETA_NAME_PING")
