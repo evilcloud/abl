@@ -5,6 +5,9 @@ import systemworks
 import humanize
 import datetime
 import sys
+import logging
+
+logging.basicConfig(level=logging.CRITICAL)
 
 
 def run():
@@ -34,13 +37,19 @@ def run():
     print(f"Launching v. {current_version} {wallet_version}")
 
     while True:
+        logging.info(f"Loop start")
         if remote_version["version"] != current_version:
             if remote_version["emergency"]:
+                logging.info(
+                    f'Remote version {remote_version["version"]}, exit 0')
                 sys.exit(0)
             if remote_version["update"]:
+                logging.info(
+                    f'Remote version {remote_version["version"]}, exit 1')
                 sys.exit(1)
 
         current_data = processor.get_data(PRC_USER, PRC_PASS)
+        logging.info(f"Current data: {current_data}")
 
         current_balance = current_data.get("total_balance", 0)
         if int(current_balance) != int(process_data.old.total_balance):
@@ -54,6 +63,7 @@ def run():
         else:
             process_data.ping(current_data.get("current_height", 0))
             ping.ping(process_data)
+            logging.info(f"Pinging: {current_data}")
             time.sleep(10)
 
 

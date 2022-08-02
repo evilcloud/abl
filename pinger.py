@@ -7,9 +7,11 @@ from urllib.request import urlopen
 import subprocess
 import time
 import git
+import logging
 
+logging.basicConfig(level=logging.CRITICAL)
 
-VERSION = '1.0.1'
+VERSION = '2.0.1'
 
 
 def clone_repo(repo_url: str, update_storage: str):
@@ -57,10 +59,11 @@ def launch():
 
     while True:
         col_data = launch_procedure()
-        if col_data == (0):
+        logging.info(f'col_data {col_data}')
+        if col_data == (0) or col_data == "EMERGENCY":
             print("Emergency stop signal received. Shutting down...")
             sys.exit(0)
-        if col_data == (1):
+        if col_data == (1) or col_data == "UPDATE":
             print("Updating process(outside) initiated")
             print("Fetching update")
             clone_repo(repo_url, update_storage)
