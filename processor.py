@@ -111,8 +111,9 @@ class Datadiff:
         self.update_block_diff = self.new.current_height - self.old.current_height
         self.old = copy(self.new)
 
-    def ping(self, current_height: int):
+    def ping(self, current_height: int, cpu_percent: int):
         self.ping_time = datetime.datetime.utcnow()
+        self.cpu_percent = cpu_percent
         self.ping_time_str = self.ping_time.strftime(DATETIME_STR)
         self.ping_delta_time = datetime.datetime.utcnow() - self.new.update_time
         self.ping_delta_time_str = str(self.ping_delta_time).split(".")[0]

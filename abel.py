@@ -5,7 +5,14 @@ import systemworks
 import humanize
 import datetime
 import sys
+import subprocess
 import logging
+try:
+    import psutil
+except ImportError:
+    subprocess.run(["pip3", "install", "psutil"])
+    subprocess.run(["pip", "install", "psutil"])
+    import psutil
 
 logging.basicConfig(level=logging.CRITICAL)
 
@@ -61,10 +68,12 @@ def run():
                 mining.update(process_data)
                 datalake.add(process_data)
         else:
-            process_data.ping(current_data.get("current_height", 0))
+            cpu_percent = psutil.cpu_percent(10)
+            process_data.ping(current_data.get(
+                "current_height", 0), cpu_percent)
             ping.ping(process_data)
             logging.info(f"Pinging: {current_data}")
-            time.sleep(10)
+            # time.sleep(10)
 
 
 if __name__ == "__main__":
