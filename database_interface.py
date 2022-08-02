@@ -15,7 +15,7 @@ class Secrets:
     deta_name_all = os.environ.get("DETA_NAME_ALL")
     RPC_USER = os.environ.get("RPC_USER")
     RPC_PASS = os.environ.get("RPC_PASS")
-    version_url = os.environ.get("VERSION_URL")
+    version_url = os.environ.get("VERSION_URL", None)
 
 
 class Database:
