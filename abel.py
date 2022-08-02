@@ -40,8 +40,8 @@ def run():
     datalake = database_interface.Database(machine_name, deta_name_all, wallet)
     ping = database_interface.Database(machine_name, deta_name_ping)
     current_version = systemworks.get_version()
-    print("Taking a sampleo of current CPU utilization (4 sec)")
-    cpu_percent = psutil.cpu_percent(4)
+    print("Taking a sample of current CPU utilization (4 sec)")
+    cpu_percent = int(psutil.cpu_percent(4))
     wallet_version = "WALLET" if wallet else ""
     print(f"Launching v. {current_version} {wallet_version}")
 
@@ -70,7 +70,7 @@ def run():
                 mining.update(process_data)
                 datalake.add(process_data)
         else:
-            cpu_percent = psutil.cpu_percent(10)
+            cpu_percent = int(psutil.cpu_percent(10))
             process_data.ping(current_data.get(
                 "current_height", 0), cpu_percent)
             ping.ping(process_data)
