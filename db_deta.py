@@ -1,17 +1,4 @@
-import sys
-import subprocess
 from deta import Deta
-from datetime import datetime
-
-if "deta" not in sys.modules:
-    print("Force-installing deta module")
-    subprocess.call(["pip3", "install", "deta"])
-    from deta import Deta
-
-    if "deta" not in sys.modules:
-        print("Missing deta module. Exiting...")
-        sys.exit(1)
-    print("Deta module installed successfully. Continuing...")
 
 
 class Detadb:
@@ -27,10 +14,17 @@ class Detadb:
             print(f"Database {DETA_DB_NAME} does not exist. Creating...")
 
     def update(self, entry):
-        self.db.put(entry)
+        try:
+            self.db.put(entry)
+        except Exception as e:
+            print(f"\tError updating database\n", e)
 
+    # Legacy method -- afraid to remove
     def ping(self, data):
-        self.db.put(data)
+        try:
+            self.db.put(data)
+        except Exception as e:
+            print(f"\tError updating ping\n", e)
 
     def fetch(self, key):
         self.existing_entries = self.db.fetch(key)

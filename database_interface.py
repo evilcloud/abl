@@ -1,12 +1,8 @@
 from dataclasses import dataclass
-from platform import machine
 import db_deta
-# import db_redis
 import os
 
 
-print("redis request")
-# r = db_redis.Redisdb()
 DETA_KEY = os.environ.get('DETA')
 
 
