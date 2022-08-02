@@ -40,7 +40,8 @@ def run():
     datalake = database_interface.Database(machine_name, deta_name_all, wallet)
     ping = database_interface.Database(machine_name, deta_name_ping)
     current_version = systemworks.get_version()
-    cpu_percent = 0
+    print("Taking a sampleo of current CPU utilization (4 sec)")
+    cpu_percent = psutil.cpu_percent(4)
     wallet_version = "WALLET" if wallet else ""
     print(f"Launching v. {current_version} {wallet_version}")
 
@@ -63,7 +64,7 @@ def run():
         if int(current_balance) != int(process_data.old.total_balance):
             process_data.update(current_data)
             print(
-                f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. CPU {cpu_percent}. Ver. {current_version} {wallet_version}"
+                f"{process_data.machine} balance updated by {process_data.update_amount} to {process_data.total_balance} {humanize.naturaldelta(process_data.update_period)} ago at {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')}. CPU {cpu_percent}%. Ver. {current_version} {wallet_version}"
             )
             if wallet:
                 mining.update(process_data)
