@@ -6,6 +6,7 @@ import subprocess
 import json
 import systemworks
 import datetime
+from urllib.request import urlopen
 
 DATETIME_STR = "%Y-%m-%dT%H:%M:%S"
 
@@ -35,6 +36,27 @@ def get_data(rpcuser, rpcpass):
 
 def get_data_2():
     return systemworks.load_json("test.json")
+
+
+def get_github_version(url) -> dict:
+    """
+    It opens a URL, reads the JSON data, and returns the version and update information.
+    In case of failure everything is denied
+    :return: A tuple of the version and update
+    """
+    try:
+        response = urlopen(url)
+        data_json = json.loads(response.read())
+        response.close()
+        version = data_json.get("version", None)
+        update = data_json.get("update", False)
+        emergency = data_json.get("emergency", False)
+    except Exception as e:
+        print(f"Failed to load version data from {url}\n{e}")
+        version = None
+        update = False
+        emergency = False
+    return {"version": version, "update": update, "emergency": emergency}
 
 
 # Class responsible for the current machine state within the scope of miner report

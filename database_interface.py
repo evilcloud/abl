@@ -9,10 +9,10 @@ DETA_KEY = os.environ.get('DETA')
 @dataclass
 class Secrets:
     DETA_KEY = os.environ.get("DETA")
-    DETA_name_mining = os.environ.get(
+    deta_name_mining = os.environ.get(
         "DETA_NAME_MINING")
-    DETA_name_ping = os.environ.get("DETA_NAME_PING")
-    DETA_name_all = os.environ.get("DETA_NAME_ALL")
+    deta_name_ping = os.environ.get("DETA_NAME_PING")
+    deta_name_all = os.environ.get("DETA_NAME_ALL")
     RPC_USER = os.environ.get("RPC_USER")
     RPC_PASS = os.environ.get("RPC_PASS")
     version_url = os.environ.get("VERSION_URL")
