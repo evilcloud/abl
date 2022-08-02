@@ -75,7 +75,6 @@ def run():
                 "current_height", 0), cpu_percent)
             ping.ping(process_data)
             logging.info(f"Pinging: {current_data}")
-            # time.sleep(10)
 
 
 if __name__ == "__main__":
