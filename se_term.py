@@ -27,7 +27,8 @@ class Printdata:
         print()
 
     def no_changes(self, data, cycle):
-        block = f"BLOCK: {data['current_height']}." if data["current_height"] else ""
+        current_height = data.get("current_height", None)
+        block = f"BLOCK: {current_height}." if current_height else ""
         print(
             f"\r{datetime.utcnow().replace(microsecond=0, tzinfo=None)}. {block} Since START: {cycle.total}, LAST SUCCESS: {cycle.new_ping} | {humanize.naturaldelta(cycle.time_since_last_sucess)}",
             end=" ",
