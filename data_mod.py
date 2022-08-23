@@ -38,6 +38,9 @@ class Abecldata:
         # And we finally make our new data old
         self.old_data = self.new_data
 
+    def machine_total(self):
+        return {self.machine_total: self.new_data["total_balance"]}
+
 
 class Cycle:
     def __init__(self):  # sourcery skip: aware-datetime-for-utc

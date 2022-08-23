@@ -16,7 +16,8 @@ wallet = se_system.is_wallet()
 
 obj = data_mod.Abecldata(machine, wallet)
 cycle = data_mod.Cycle()
-db = db_deta.Detadb(DETA_KEY, machine)
+db_machine = db_deta.Detadb(DETA_KEY, machine)
+db_totals = db_deta.Detadb(DETA_KEY, "_totals")
 prnt = se_term.Printdata(machine, wallet)
 
 while True:
@@ -27,8 +28,8 @@ while True:
     if obj.changed:
         cycle.success()
 
-        db.put(obj.new_data)
-        # se_term.print_changes(obj.new_data)
+        db_machine.put(obj.new_data)
+        db_totals.put(obj.machine_total())
         prnt.changes(obj.new_data)
     else:
         cycle.pinging()
