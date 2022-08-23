@@ -34,6 +34,5 @@ while True:
     else:
         cycle.pinging()
 
-        # se_term.print_ping(cycle, obj.new_data)
         prnt.no_changes(obj.new_data, cycle)
         time.sleep(1)
