@@ -39,7 +39,7 @@ class Abecldata:
         self.old_data = self.new_data
 
     def machine_total(self):
-        return {self.machine: self.new_data["total_balance"]}
+        return {"key": self.machine, "total_balance": self.new_data["total_balance"]}
 
 
 class Cycle:
